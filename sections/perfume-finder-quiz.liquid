@@ -147,7 +147,7 @@
       <!-- Mensaje de error de autenticación -->
       <div id="auth-error" class="perfume-quiz__error" style="display: none;">
         {{ section.settings.auth_error_message }}
-        <a href="/account/login">{{ section.settings.login_link_text }}</a>
+        <a href="/account/login?return_url={{ request.path | url_encode }}">{{ section.settings.login_link_text }}</a>
       </div>
 
       <button type="submit" class="perfume-quiz__button button button--primary">
