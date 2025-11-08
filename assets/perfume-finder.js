@@ -137,10 +137,19 @@ function displayRecommendations(products) {
     const card = document.createElement('div');
     card.className = 'perfume-chat__product-card';
 
+    // Formatear precio: eliminar ".0" y formato CLP
+    const formatPrice = (price) => {
+      if (!price) return '';
+      // Convertir a número y eliminar decimales si son .0
+      const numPrice = parseFloat(price);
+      const cleanPrice = numPrice % 1 === 0 ? Math.floor(numPrice) : numPrice;
+      return `${cleanPrice.toLocaleString('es-CL')} <span class="perfume-chat__product-currency">CLP</span>`;
+    };
+
     // Construir el HTML del precio
-    let priceHtml = `<span class="perfume-chat__product-price">${product.price}</span>`;
-    if (product.compareAtPrice) {
-      priceHtml += `<span class="perfume-chat__product-price--compare">${product.compareAtPrice}</span>`;
+    let priceHtml = `<span class="perfume-chat__product-price">${formatPrice(product.price)}</span>`;
+    if (product.compareAtPrice && parseFloat(product.compareAtPrice) > 0) {
+      priceHtml += `<span class="perfume-chat__product-price--compare">${formatPrice(product.compareAtPrice)}</span>`;
     }
 
     card.innerHTML = `
