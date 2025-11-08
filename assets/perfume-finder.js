@@ -219,17 +219,43 @@ function handleError(error) {
   }
 
   if (error.message === 'RATE_LIMIT_EXCEEDED') {
-    addChatMessage(
-      'Has alcanzado el límite de conversaciones diarias. Por favor intenta mañana.',
-      'error'
-    );
+    // Mostrar en el quiz si aún no hay chat
+    const authError = document.getElementById('auth-error');
+    const chatSection = document.getElementById('perfume-chat');
+
+    if (authError && (!chatSection || !chatSection.classList.contains('perfume-chat--active'))) {
+      // Mostrar en la sección del quiz
+      authError.innerHTML = `
+        <strong>⏱️ Límite alcanzado</strong><br>
+        Has usado todas tus consultas disponibles por hoy. Intenta nuevamente mañana para obtener más recomendaciones personalizadas.
+      `;
+      authError.style.display = 'block';
+      authError.style.backgroundColor = '#fff3cd';
+      authError.style.borderColor = '#ffc107';
+      authError.style.color = '#856404';
+
+      // Scroll al mensaje
+      authError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else {
+      // Mostrar en el chat si ya está activo
+      addChatMessage(
+        '⏱️ Límite alcanzado: Has usado todas tus consultas diarias. Vuelve mañana para más recomendaciones.',
+        'error'
+      );
+    }
     return;
   }
 
-  addChatMessage(
-    'Hubo un error al procesar tu solicitud. Por favor intenta nuevamente.',
-    'error'
-  );
+  // Error genérico
+  const chatSection = document.getElementById('perfume-chat');
+  if (chatSection && chatSection.classList.contains('perfume-chat--active')) {
+    addChatMessage(
+      'Hubo un error al procesar tu solicitud. Por favor intenta nuevamente.',
+      'error'
+    );
+  } else {
+    alert('Error al conectar con el servidor. Por favor intenta nuevamente en unos momentos.');
+  }
 }
 
 // ============================================
@@ -251,6 +277,10 @@ async function handleQuizSubmit(event) {
   if (isProcessing) return;
   isProcessing = true;
 
+  // Obtener botón
+  const submitBtn = event.target.querySelector('button[type="submit"]');
+  const originalBtnText = submitBtn ? submitBtn.textContent : '';
+
   try {
     // Recopilar datos del formulario
     const formData = {
@@ -265,6 +295,13 @@ async function handleQuizSubmit(event) {
       alert('Por favor completa todos los campos');
       isProcessing = false;
       return;
+    }
+
+    // Mostrar loading en el botón
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Buscando tu perfume ideal...';
+      submitBtn.style.opacity = '0.7';
     }
 
     // Iniciar conversación con la API
@@ -301,6 +338,13 @@ async function handleQuizSubmit(event) {
     }
 
   } catch (error) {
+    // Restaurar botón
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalBtnText;
+      submitBtn.style.opacity = '1';
+    }
+
     handleError(error);
     toggleLoading(false);
   } finally {
@@ -313,6 +357,7 @@ async function handleQuizSubmit(event) {
  */
 async function handleChatSend() {
   const input = document.getElementById('chat-input');
+  const sendBtn = document.getElementById('chat-send');
   if (!input) return;
 
   const message = input.value.trim();
@@ -322,10 +367,19 @@ async function handleChatSend() {
   isProcessing = true;
   toggleChatInput(false);
 
+  // Guardar texto original del botón
+  const originalBtnText = sendBtn ? sendBtn.textContent : '';
+
   try {
     // Mostrar mensaje del usuario
     addChatMessage(message, 'user');
     input.value = '';
+
+    // Actualizar botón a estado de loading
+    if (sendBtn) {
+      sendBtn.textContent = '...';
+      sendBtn.style.opacity = '0.7';
+    }
 
     // Enviar a la API
     toggleLoading(true);
@@ -347,6 +401,12 @@ async function handleChatSend() {
     toggleLoading(false);
     toggleChatInput(true);
 
+    // Restaurar botón
+    if (sendBtn) {
+      sendBtn.textContent = originalBtnText;
+      sendBtn.style.opacity = '1';
+    }
+
     // Focus en el input
     setTimeout(() => input.focus(), 100);
 
@@ -354,6 +414,12 @@ async function handleChatSend() {
     handleError(error);
     toggleLoading(false);
     toggleChatInput(true);
+
+    // Restaurar botón en caso de error
+    if (sendBtn) {
+      sendBtn.textContent = originalBtnText;
+      sendBtn.style.opacity = '1';
+    }
   } finally {
     isProcessing = false;
   }
