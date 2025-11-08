@@ -1,0 +1,24 @@
+{
+  "sections": {
+    "perfume_finder_hero": {
+      "type": "perfume-finder-hero",
+      "settings": {
+      }
+    },
+    "perfume_finder_quiz": {
+      "type": "perfume-finder-quiz",
+      "settings": {
+      }
+    },
+    "perfume_finder_chat": {
+      "type": "perfume-finder-chat",
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "perfume_finder_hero",
+    "perfume_finder_quiz",
+    "perfume_finder_chat"
+  ]
+}

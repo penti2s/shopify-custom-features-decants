@@ -1,0 +1,134 @@
+{% comment %}
+  Renders a savings callout showing how much the customer saves vs full-size perfume
+
+  Accepts:
+  - decant_price: {Number} Price of the decant (required)
+  - fullsize_price: {Number} Price of full-size perfume (optional, defaults to estimate)
+  - decant_size: {String} Size of decant (e.g., "5ml") (optional)
+  - fullsize_size: {String} Size of full-size (e.g., "100ml") (optional)
+  - show_calculation: {Boolean} Show price-per-ml calculation (default: false)
+
+  Usage:
+  {% render 'decant-savings', decant_price: 12990, fullsize_price: 180000 %}
+  {% render 'decant-savings', decant_price: product.price, fullsize_price: 180000, decant_size: '5ml' %}
+{% endcomment %}
+
+{%- liquid
+  assign decant_price_value = decant_price | default: 0
+  assign fullsize_price_value = fullsize_price | default: 0
+  assign decant_ml = decant_size | remove: 'ml' | times: 1 | default: 5
+  assign fullsize_ml = fullsize_size | remove: 'ml' | times: 1 | default: 100
+
+  # If no fullsize price provided, estimate based on typical markup
+  if fullsize_price_value == 0
+    assign fullsize_price_value = decant_price_value | times: fullsize_ml | divided_by: decant_ml | times: 1.5 | round
+  endif
+
+  assign savings = fullsize_price_value | minus: decant_price_value
+  assign savings_percent = savings | times: 100 | divided_by: fullsize_price_value | round
+
+  if show_calculation
+    assign decant_per_ml = decant_price_value | divided_by: decant_ml | round
+    assign fullsize_per_ml = fullsize_price_value | divided_by: fullsize_ml | round
+  endif
+-%}
+
+{%- if savings > 0 -%}
+  <style>
+    .decant-savings {
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(var(--color-button), 0.1), rgba(var(--color-button), 0.05));
+      border: 2px solid rgba(var(--color-button), 0.3);
+      border-radius: var(--text-boxes-radius, 8px);
+      margin: 1.5rem 0;
+    }
+
+    .decant-savings__main {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .decant-savings__icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 3rem;
+      height: 3rem;
+      background: rgb(var(--color-button));
+      color: rgb(var(--color-button-text));
+      border-radius: 50%;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .decant-savings__text {
+      flex: 1;
+    }
+
+    .decant-savings__amount {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: rgb(var(--color-button));
+      line-height: 1.2;
+    }
+
+    .decant-savings__comparison {
+      font-size: 1.3rem;
+      color: rgba(var(--color-foreground), 0.7);
+      margin-top: 0.3rem;
+    }
+
+    .decant-savings__calculation {
+      padding-top: 1rem;
+      margin-top: 1rem;
+      border-top: 1px solid rgba(var(--color-foreground), 0.1);
+      font-size: 1.2rem;
+      color: rgba(var(--color-foreground), 0.6);
+    }
+
+    .decant-savings__calculation-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    @media screen and (max-width: 749px) {
+      .decant-savings {
+        padding: 1.2rem;
+      }
+
+      .decant-savings__amount {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+
+  <div class="decant-savings">
+    <div class="decant-savings__main">
+      <div class="decant-savings__icon">💰</div>
+      <div class="decant-savings__text">
+        <div class="decant-savings__amount">
+          Ahorras {{ savings | money }}
+        </div>
+        <div class="decant-savings__comparison">
+          vs. perfume completo ({{ fullsize_size | default: '100ml' }})
+        </div>
+      </div>
+    </div>
+
+    {%- if show_calculation -%}
+      <div class="decant-savings__calculation">
+        <div class="decant-savings__calculation-row">
+          <span>Decant ({{ decant_size | default: '5ml' }}):</span>
+          <strong>{{ decant_per_ml | money }}/ml</strong>
+        </div>
+        <div class="decant-savings__calculation-row">
+          <span>Tamaño completo:</span>
+          <strong>{{ fullsize_per_ml | money }}/ml</strong>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}

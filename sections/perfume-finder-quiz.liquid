@@ -1,0 +1,261 @@
+{%- style -%}
+  .perfume-quiz {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+  }
+
+  .perfume-quiz__title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .perfume-quiz__field {
+    margin-bottom: 2rem;
+  }
+
+  .perfume-quiz__field label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .perfume-quiz__field select {
+    width: 100%;
+    padding: 0.875rem;
+    font-size: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+
+  .perfume-quiz__field select:focus {
+    outline: none;
+    border-color: rgb(var(--color-button));
+  }
+
+  .perfume-quiz__button {
+    width: 100%;
+    padding: 1.125rem;
+    font-size: 1.125rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 1rem;
+  }
+
+  .perfume-quiz__button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .perfume-quiz__button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .perfume-quiz__error {
+    background-color: #fee;
+    border: 1px solid #fcc;
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .perfume-quiz__error a {
+    color: rgb(var(--color-link));
+    text-decoration: underline;
+  }
+
+  .perfume-quiz--hidden {
+    display: none !important;
+  }
+
+  @media screen and (max-width: 749px) {
+    .perfume-quiz {
+      padding: 2rem 1.5rem;
+    }
+
+    .perfume-quiz__title {
+      font-size: 1.5rem;
+    }
+  }
+{%- endstyle -%}
+
+<div class="perfume-quiz color-{{ section.settings.color_scheme }}" id="perfume-quiz">
+  <div class="page-width">
+    {% if section.settings.show_title %}
+      <h2 class="perfume-quiz__title">{{ section.settings.quiz_title }}</h2>
+    {% endif %}
+
+    <form id="perfume-quiz-form">
+
+      <!-- Campo: Género -->
+      <div class="perfume-quiz__field">
+        <label for="gender">{{ section.settings.gender_label }}</label>
+        <select id="gender" name="gender" required>
+          <option value="">{{ section.settings.select_placeholder }}</option>
+          <option value="hombre">Hombre</option>
+          <option value="mujer">Mujer</option>
+          <option value="unisex">Unisex</option>
+        </select>
+      </div>
+
+      <!-- Campo: Ocasión -->
+      <div class="perfume-quiz__field">
+        <label for="occasion">{{ section.settings.occasion_label }}</label>
+        <select id="occasion" name="occasion" required>
+          <option value="">{{ section.settings.select_placeholder }}</option>
+          <option value="diario">Uso diario</option>
+          <option value="trabajo">Trabajo/Oficina</option>
+          <option value="noche">Noche/Fiesta</option>
+          <option value="especial">Ocasión especial</option>
+        </select>
+      </div>
+
+      <!-- Campo: Familia Olfativa -->
+      <div class="perfume-quiz__field">
+        <label for="family">{{ section.settings.family_label }}</label>
+        <select id="family" name="family" required>
+          <option value="">{{ section.settings.select_placeholder }}</option>
+          <option value="fresco">Fresco (cítricos, acuático)</option>
+          <option value="floral">Floral (rosas, jazmín)</option>
+          <option value="amaderado">Amaderado (sándalo, cedro)</option>
+          <option value="oriental">Oriental (vainilla, especias)</option>
+          <option value="frutal">Frutal (manzana, pera)</option>
+        </select>
+      </div>
+
+      <!-- Campo: Intensidad -->
+      <div class="perfume-quiz__field">
+        <label for="intensity">{{ section.settings.intensity_label }}</label>
+        <select id="intensity" name="intensity" required>
+          <option value="">{{ section.settings.select_placeholder }}</option>
+          <option value="suave">Suave y sutil</option>
+          <option value="moderado">Moderado</option>
+          <option value="intenso">Intenso y duradero</option>
+        </select>
+      </div>
+
+      <!-- Mensaje de error de autenticación -->
+      <div id="auth-error" class="perfume-quiz__error" style="display: none;">
+        {{ section.settings.auth_error_message }}
+        <a href="/account/login">{{ section.settings.login_link_text }}</a>
+      </div>
+
+      <button type="submit" class="perfume-quiz__button button button--primary">
+        {{ section.settings.submit_button_text }}
+      </button>
+    </form>
+  </div>
+</div>
+
+<script src="{{ 'perfume-finder.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Perfume Finder Quiz",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Mostrar título",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "quiz_title",
+      "label": "Título del quiz",
+      "default": "Cuéntanos tus preferencias"
+    },
+    {
+      "type": "text",
+      "id": "gender_label",
+      "label": "Etiqueta género",
+      "default": "¿Para quién es el perfume?"
+    },
+    {
+      "type": "text",
+      "id": "occasion_label",
+      "label": "Etiqueta ocasión",
+      "default": "¿Para qué ocasión?"
+    },
+    {
+      "type": "text",
+      "id": "family_label",
+      "label": "Etiqueta familia olfativa",
+      "default": "¿Qué tipo de aroma prefieres?"
+    },
+    {
+      "type": "text",
+      "id": "intensity_label",
+      "label": "Etiqueta intensidad",
+      "default": "¿Qué intensidad prefieres?"
+    },
+    {
+      "type": "text",
+      "id": "select_placeholder",
+      "label": "Texto placeholder select",
+      "default": "Selecciona una opción"
+    },
+    {
+      "type": "text",
+      "id": "submit_button_text",
+      "label": "Texto botón enviar",
+      "default": "Encontrar mi perfume"
+    },
+    {
+      "type": "textarea",
+      "id": "auth_error_message",
+      "label": "Mensaje error autenticación",
+      "default": "Debes iniciar sesión para usar el buscador de perfumes."
+    },
+    {
+      "type": "text",
+      "id": "login_link_text",
+      "label": "Texto link login",
+      "default": "Iniciar sesión"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "accent-1",
+          "label": "Accent 1"
+        },
+        {
+          "value": "accent-2",
+          "label": "Accent 2"
+        },
+        {
+          "value": "background-1",
+          "label": "Background 1"
+        },
+        {
+          "value": "background-2",
+          "label": "Background 2"
+        },
+        {
+          "value": "inverse",
+          "label": "Inverse"
+        }
+      ],
+      "default": "background-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Perfume Finder Quiz"
+    }
+  ]
+}
+{% endschema %}

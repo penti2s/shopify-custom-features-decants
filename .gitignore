@@ -1,0 +1,45 @@
+# Shopify CLI
+.shopify/
+
+# Internal documentation (private)
+.internal/
+
+# Node modules (if using any build tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Config files with sensitive data (if any)
+config.yml
+config/settings_data.json.backup
+
+# Build outputs (if using any preprocessors)
+dist/
+build/

@@ -1,0 +1,126 @@
+{%- style -%}
+  .perfume-finder-hero {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    margin-bottom: 2rem;
+  }
+
+  .perfume-finder-hero__title {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+
+  .perfume-finder-hero__description {
+    font-size: 1.25rem;
+    max-width: 600px;
+    margin: 0 auto;
+    opacity: 0.95;
+    line-height: 1.6;
+  }
+
+  .perfume-finder-hero__icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .perfume-finder-hero {
+      padding: 3rem 1.5rem;
+    }
+
+    .perfume-finder-hero__title {
+      font-size: 2rem;
+    }
+
+    .perfume-finder-hero__description {
+      font-size: 1.1rem;
+    }
+  }
+{%- endstyle -%}
+
+<div class="perfume-finder-hero color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width">
+    {% if section.settings.show_icon %}
+      <div class="perfume-finder-hero__icon">
+        {{ section.settings.icon }}
+      </div>
+    {% endif %}
+
+    <h1 class="perfume-finder-hero__title">
+      {{ section.settings.title }}
+    </h1>
+
+    <p class="perfume-finder-hero__description">
+      {{ section.settings.description }}
+    </p>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Perfume Finder Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Título",
+      "default": "¿No sabes qué escoger?"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Descripción",
+      "default": "Ningún problema. Encuentra tu perfume perfecto según tus gustos con ayuda de nuestra IA."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_icon",
+      "label": "Mostrar ícono",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "icon",
+      "label": "Ícono (emoji)",
+      "default": "🎁"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "accent-1",
+          "label": "Accent 1"
+        },
+        {
+          "value": "accent-2",
+          "label": "Accent 2"
+        },
+        {
+          "value": "background-1",
+          "label": "Background 1"
+        },
+        {
+          "value": "background-2",
+          "label": "Background 2"
+        },
+        {
+          "value": "inverse",
+          "label": "Inverse"
+        }
+      ],
+      "default": "accent-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Perfume Finder Hero"
+    }
+  ]
+}
+{% endschema %}

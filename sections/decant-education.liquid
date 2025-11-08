@@ -1,0 +1,383 @@
+{{ 'section-decant-education.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="decant-education color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width section-{{ section.id }}-padding">
+
+    {%- if section.settings.heading != blank -%}
+      <div class="decant-education__header center">
+        <h2 class="decant-education__heading h1">{{ section.settings.heading }}</h2>
+        {%- if section.settings.subheading != blank -%}
+          <p class="decant-education__subheading">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="decant-education__grid">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+
+            {%- when 'process_step' -%}
+              <div class="decant-education__step" {{ block.shopify_attributes }}>
+                <div class="decant-education__step-icon">
+                  {%- if block.settings.icon != blank -%}
+                    {{ block.settings.icon }}
+                  {%- else -%}
+                    <span class="decant-education__step-number">{{ forloop.index }}</span>
+                  {%- endif -%}
+                </div>
+                <h3 class="decant-education__step-title h4">{{ block.settings.title }}</h3>
+                <div class="decant-education__step-description rte">
+                  {{ block.settings.description }}
+                </div>
+              </div>
+
+            {%- when 'authenticity_badge' -%}
+              <div class="decant-education__authenticity" {{ block.shopify_attributes }}>
+                <div class="decant-education__authenticity-icon">
+                  {%- if block.settings.icon != blank -%}
+                    {{ block.settings.icon }}
+                  {%- else -%}
+                    ✓
+                  {%- endif -%}
+                </div>
+                <h3 class="decant-education__authenticity-title h4">{{ block.settings.title }}</h3>
+                <div class="decant-education__authenticity-description rte">
+                  {{ block.settings.description }}
+                </div>
+              </div>
+
+            {%- when 'price_comparison' -%}
+              <div class="decant-education__comparison" {{ block.shopify_attributes }}>
+                <h3 class="decant-education__comparison-title h3 center">{{ block.settings.title }}</h3>
+                <div class="decant-education__comparison-grid">
+                  <div class="decant-education__comparison-item decant-education__comparison-item--highlight">
+                    <div class="decant-education__comparison-label">{{ block.settings.decant_label }}</div>
+                    <div class="decant-education__comparison-size">{{ block.settings.decant_size }}</div>
+                    <div class="decant-education__comparison-price">{{ block.settings.decant_price }}</div>
+                    <div class="decant-education__comparison-note">{{ block.settings.decant_note }}</div>
+                  </div>
+                  <div class="decant-education__comparison-vs">vs</div>
+                  <div class="decant-education__comparison-item">
+                    <div class="decant-education__comparison-label">{{ block.settings.fullsize_label }}</div>
+                    <div class="decant-education__comparison-size">{{ block.settings.fullsize_size }}</div>
+                    <div class="decant-education__comparison-price">{{ block.settings.fullsize_price }}</div>
+                    <div class="decant-education__comparison-note">{{ block.settings.fullsize_note }}</div>
+                  </div>
+                </div>
+                {%- if block.settings.savings_text != blank -%}
+                  <div class="decant-education__savings center">
+                    <span class="decant-education__savings-badge">{{ block.settings.savings_text }}</span>
+                  </div>
+                {%- endif -%}
+              </div>
+
+            {%- when 'faq_item' -%}
+              <details class="decant-education__faq" {{ block.shopify_attributes }}>
+                <summary class="decant-education__faq-question">
+                  <span>{{ block.settings.question }}</span>
+                  <svg class="icon icon-caret" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true" focusable="false">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M9.354.646a.5.5 0 00-.708 0L5 4.293 1.354.646a.5.5 0 00-.708.708l4 4a.5.5 0 00.708 0l4-4a.5.5 0 000-.708z" fill="currentColor">
+                  </svg>
+                </summary>
+                <div class="decant-education__faq-answer rte">
+                  {{ block.settings.answer }}
+                </div>
+              </details>
+
+            {%- when 'cta_button' -%}
+              <div class="decant-education__cta center" {{ block.shopify_attributes }}>
+                {%- if block.settings.button_text != blank -%}
+                  <a href="{{ block.settings.button_link }}" class="button button--primary">
+                    {{ block.settings.button_text }}
+                  </a>
+                {%- endif -%}
+                {%- if block.settings.secondary_text != blank -%}
+                  <p class="decant-education__cta-secondary">{{ block.settings.secondary_text }}</p>
+                {%- endif -%}
+              </div>
+
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Educacion Decants",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Titulo",
+      "default": "Que es un Decant?"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subtitulo",
+      "default": "Descubre como acceder a fragancias de lujo sin pagar el precio completo"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Esquema de color",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Espaciado superior",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Espaciado inferior",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "process_step",
+      "name": "Paso del Proceso",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titulo",
+          "default": "Seleccionamos perfumes originales"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Descripcion",
+          "default": "<p>Compramos perfumes 100% originales de marcas premium como Dior, Chanel, y Tom Ford.</p>"
+        },
+        {
+          "type": "html",
+          "id": "icon",
+          "label": "Icono SVG (opcional)",
+          "info": "Puedes agregar un SVG personalizado aqui"
+        }
+      ]
+    },
+    {
+      "type": "authenticity_badge",
+      "name": "Insignia de Autenticidad",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titulo",
+          "default": "100% Originales"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Descripcion",
+          "default": "<p>Todos nuestros decants provienen de perfumes autenticos de lujo. Garantizamos la calidad.</p>"
+        },
+        {
+          "type": "html",
+          "id": "icon",
+          "label": "Icono (opcional)"
+        }
+      ]
+    },
+    {
+      "type": "price_comparison",
+      "name": "Comparacion de Precios",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Titulo",
+          "default": "Compara el Ahorro"
+        },
+        {
+          "type": "text",
+          "id": "decant_label",
+          "label": "Etiqueta Decant",
+          "default": "Decant Austral"
+        },
+        {
+          "type": "text",
+          "id": "decant_size",
+          "label": "Tamano Decant",
+          "default": "5ml"
+        },
+        {
+          "type": "text",
+          "id": "decant_price",
+          "label": "Precio Decant",
+          "default": "$12.990"
+        },
+        {
+          "type": "text",
+          "id": "decant_note",
+          "label": "Nota Decant",
+          "default": "Perfecto para probar"
+        },
+        {
+          "type": "text",
+          "id": "fullsize_label",
+          "label": "Etiqueta Tamano Completo",
+          "default": "Perfume Completo"
+        },
+        {
+          "type": "text",
+          "id": "fullsize_size",
+          "label": "Tamano Completo",
+          "default": "100ml"
+        },
+        {
+          "type": "text",
+          "id": "fullsize_price",
+          "label": "Precio Completo",
+          "default": "$180.000"
+        },
+        {
+          "type": "text",
+          "id": "fullsize_note",
+          "label": "Nota Completo",
+          "default": "Inversion grande"
+        },
+        {
+          "type": "text",
+          "id": "savings_text",
+          "label": "Texto de Ahorro",
+          "default": "Ahorra mas de $160.000 probando primero"
+        }
+      ]
+    },
+    {
+      "type": "faq_item",
+      "name": "Pregunta Frecuente",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Pregunta",
+          "default": "Los decants son originales?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Respuesta",
+          "default": "<p>Si, 100% originales. Compramos los perfumes directamente de distribuidores autorizados y los atomizamos en frascos individuales de alta calidad.</p>"
+        }
+      ]
+    },
+    {
+      "type": "cta_button",
+      "name": "Llamado a la Accion",
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Texto del Boton",
+          "default": "Explorar Fragancias"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Enlace del Boton"
+        },
+        {
+          "type": "text",
+          "id": "secondary_text",
+          "label": "Texto Secundario",
+          "default": "Despacho en Punta Arenas y Region de Magallanes"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Educacion Decants",
+      "blocks": [
+        {
+          "type": "process_step",
+          "settings": {
+            "title": "1. Seleccionamos Perfumes Originales",
+            "description": "<p>Compramos perfumes 100% autenticos de marcas premium como Dior, Chanel, Tom Ford y fragancias de nicho.</p>"
+          }
+        },
+        {
+          "type": "process_step",
+          "settings": {
+            "title": "2. Atomizamos con Precision",
+            "description": "<p>Cada decant es atomizado cuidadosamente en frascos de alta calidad con spray profesional.</p>"
+          }
+        },
+        {
+          "type": "process_step",
+          "settings": {
+            "title": "3. Empacamos y Enviamos",
+            "description": "<p>Empaque seguro con proteccion especial. Envio en Region de Magallanes.</p>"
+          }
+        },
+        {
+          "type": "authenticity_badge",
+          "settings": {
+            "title": "✓ 100% Originales Garantizado",
+            "description": "<p>Todos nuestros decants provienen de perfumes autenticos de lujo. Sin copias, sin imitaciones.</p>"
+          }
+        },
+        {
+          "type": "price_comparison"
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Los decants son originales?",
+            "answer": "<p>Si, 100% originales. Compramos los perfumes directamente y los atomizamos en el momento.</p>"
+          }
+        },
+        {
+          "type": "faq_item",
+          "settings": {
+            "question": "Cuanto dura un decant de 5ml?",
+            "answer": "<p>Un decant de 5ml dura aproximadamente 1-2 meses con uso diario (2-3 aplicaciones por dia). Perfecto para probar antes de comprar el tamano completo.</p>"
+          }
+        },
+        {
+          "type": "cta_button",
+          "settings": {
+            "button_text": "Ver Todas las Fragancias",
+            "button_link": "/collections/all"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

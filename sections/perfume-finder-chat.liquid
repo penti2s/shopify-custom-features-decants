@@ -1,0 +1,387 @@
+{%- style -%}
+  .perfume-chat {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: rgba(var(--color-foreground), 0.04);
+    border-radius: 8px;
+    display: none;
+  }
+
+  .perfume-chat--active {
+    display: block;
+  }
+
+  .perfume-chat__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .perfume-chat__messages {
+    min-height: 400px;
+    max-height: 600px;
+    overflow-y: auto;
+    background: rgb(var(--color-background));
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+
+  .perfume-chat__message {
+    margin-bottom: 1.25rem;
+    padding: 1rem;
+    border-radius: 8px;
+    line-height: 1.6;
+    max-width: 85%;
+    animation: fadeInMessage 0.3s ease;
+  }
+
+  @keyframes fadeInMessage {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .perfume-chat__message--user {
+    background: rgb(var(--color-button));
+    color: rgb(var(--color-button-text));
+    margin-left: auto;
+    text-align: right;
+  }
+
+  .perfume-chat__message--ai {
+    background: rgba(var(--color-foreground), 0.08);
+    color: rgb(var(--color-foreground));
+  }
+
+  .perfume-chat__message--error {
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #fcc;
+  }
+
+  .perfume-chat__input-wrapper {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .perfume-chat__input {
+    flex: 1;
+    padding: 1rem;
+    border: 1px solid rgba(var(--color-foreground), 0.2);
+    border-radius: 4px;
+    font-size: 1rem;
+    font-family: inherit;
+    background: rgb(var(--color-background));
+    color: rgb(var(--color-foreground));
+    transition: border-color 0.2s;
+  }
+
+  .perfume-chat__input:focus {
+    outline: none;
+    border-color: rgb(var(--color-button));
+  }
+
+  .perfume-chat__input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .perfume-chat__send {
+    padding: 1rem 2rem;
+    white-space: nowrap;
+  }
+
+  .perfume-chat__loading {
+    display: none;
+    text-align: center;
+    padding: 1rem;
+    color: rgba(var(--color-foreground), 0.6);
+    font-style: italic;
+  }
+
+  .perfume-chat__loading--active {
+    display: block;
+  }
+
+  .perfume-chat__loading::after {
+    content: '...';
+    animation: loadingDots 1.5s infinite;
+  }
+
+  @keyframes loadingDots {
+    0%, 20% {
+      content: '.';
+    }
+    40% {
+      content: '..';
+    }
+    60%, 100% {
+      content: '...';
+    }
+  }
+
+  .perfume-chat__recommendations {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid rgba(var(--color-foreground), 0.1);
+    display: none;
+  }
+
+  .perfume-chat__recommendations--visible {
+    display: block;
+  }
+
+  .perfume-chat__recommendations-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+
+  .perfume-chat__product-card {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: rgb(var(--color-background));
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+    transition: all 0.3s;
+  }
+
+  .perfume-chat__product-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+
+  .perfume-chat__product-image-wrapper {
+    flex-shrink: 0;
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(var(--color-foreground), 0.04);
+  }
+
+  .perfume-chat__product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .perfume-chat__product-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .perfume-chat__product-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: rgb(var(--color-foreground));
+  }
+
+  .perfume-chat__product-reason {
+    font-size: 0.95rem;
+    color: rgba(var(--color-foreground), 0.7);
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .perfume-chat__product-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+  }
+
+  .perfume-chat__product-price {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: rgb(var(--color-foreground));
+  }
+
+  .perfume-chat__product-price--compare {
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(var(--color-foreground), 0.5);
+    text-decoration: line-through;
+    margin-left: 0.5rem;
+  }
+
+  .perfume-chat__product-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .perfume-chat {
+      padding: 1.5rem;
+      margin: 1rem;
+    }
+
+    .perfume-chat__messages {
+      min-height: 300px;
+      max-height: 400px;
+      padding: 1rem;
+    }
+
+    .perfume-chat__message {
+      max-width: 90%;
+    }
+
+    .perfume-chat__input-wrapper {
+      flex-direction: column;
+    }
+
+    .perfume-chat__send {
+      width: 100%;
+    }
+
+    .perfume-chat__product-card {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .perfume-chat__product-image-wrapper {
+      width: 100%;
+      height: 200px;
+    }
+
+    .perfume-chat__product-footer {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.75rem;
+    }
+
+    .perfume-chat__product-button {
+      width: 100%;
+    }
+  }
+{%- endstyle -%}
+
+<div class="perfume-chat color-{{ section.settings.color_scheme }}" id="perfume-chat">
+  <div class="page-width">
+    {% if section.settings.show_title %}
+      <h2 class="perfume-chat__title">{{ section.settings.chat_title }}</h2>
+    {% endif %}
+
+    <div class="perfume-chat__messages" id="chat-messages">
+      <!-- Los mensajes se insertarán aquí dinámicamente -->
+    </div>
+
+    <div class="perfume-chat__loading" id="chat-loading">
+      {{ section.settings.loading_text }}
+    </div>
+
+    <div class="perfume-chat__input-wrapper">
+      <input
+        type="text"
+        id="chat-input"
+        class="perfume-chat__input"
+        placeholder="{{ section.settings.input_placeholder }}"
+        disabled
+      >
+      <button
+        id="chat-send"
+        class="perfume-chat__send button button--primary"
+        disabled
+      >
+        {{ section.settings.send_button_text }}
+      </button>
+    </div>
+
+    <div class="perfume-chat__recommendations" id="chat-recommendations">
+      <h3 class="perfume-chat__recommendations-title">{{ section.settings.recommendations_title }}</h3>
+      <div id="recommendations-list"></div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Perfume Finder Chat",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Mostrar título",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "chat_title",
+      "label": "Título del chat",
+      "default": "Conversación con tu asesor de fragancias"
+    },
+    {
+      "type": "text",
+      "id": "input_placeholder",
+      "label": "Placeholder del input",
+      "default": "Escribe tu mensaje o preferencias adicionales..."
+    },
+    {
+      "type": "text",
+      "id": "send_button_text",
+      "label": "Texto botón enviar",
+      "default": "Enviar"
+    },
+    {
+      "type": "text",
+      "id": "loading_text",
+      "label": "Texto de carga",
+      "default": "Pensando"
+    },
+    {
+      "type": "text",
+      "id": "recommendations_title",
+      "label": "Título recomendaciones",
+      "default": "Recomendaciones para ti"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "accent-1",
+          "label": "Accent 1"
+        },
+        {
+          "value": "accent-2",
+          "label": "Accent 2"
+        },
+        {
+          "value": "background-1",
+          "label": "Background 1"
+        },
+        {
+          "value": "background-2",
+          "label": "Background 2"
+        },
+        {
+          "value": "inverse",
+          "label": "Inverse"
+        }
+      ],
+      "default": "background-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Perfume Finder Chat"
+    }
+  ]
+}
+{% endschema %}
