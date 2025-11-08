@@ -18,25 +18,38 @@
 
   .perfume-quiz__field label {
     display: block;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    font-size: 1.125rem;
+    color: rgba(var(--color-foreground), 0.95);
   }
 
   .perfume-quiz__field select {
     width: 100%;
-    padding: 0.875rem;
-    font-size: 1rem;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
+    padding: 1.25rem 1rem;
+    font-size: 1.125rem;
+    border: 2px solid rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
     background-color: white;
     cursor: pointer;
-    transition: border-color 0.2s;
+    transition: all 0.25s ease;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23333' d='M1.41 0L6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 3rem;
+  }
+
+  .perfume-quiz__field select:hover {
+    border-color: rgba(var(--color-button), 0.5);
+    background-color: rgba(var(--color-button), 0.02);
   }
 
   .perfume-quiz__field select:focus {
     outline: none;
     border-color: rgb(var(--color-button));
+    box-shadow: 0 0 0 3px rgba(var(--color-button), 0.1);
+    background-color: white;
   }
 
   .perfume-quiz__button {
